@@ -1,0 +1,27 @@
+\begin{zed}
+[FINGERPRINT,~TIMESTAMP,~DATA]\\
+\end{zed}
+\begin{schema}{Bloque}
+fingerprint:FINGERPRINT\\
+prevblock:~FINGERPRINT\\
+timestamp:~TIMESTAMP\\
+data:~DATA\\
+\end{schema}
+\begin{axdef}
+getFingerprint~:~Bloque~\fun~FINGERPRINT\\
+\end{axdef}
+\begin{schema}{Nodo}
+cadena:~\seq~Bloque\\
+\end{schema}
+\begin{schema}{ValidarPOW}
+\Xi Nodo\\
+bloque:~Bloque\\
+\where
+bloque.prevblock~=~(last~cadena).fingerprint\\
+\end{schema}
+\begin{schema}{AgregarCadenaOk}
+\Delta Nodo\\
+nuevo?:~Bloque\\
+\where
+true\\
+\end{schema}
