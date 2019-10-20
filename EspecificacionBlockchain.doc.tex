@@ -8,6 +8,7 @@ Reporte::=~Okay~|~BloqueInvalido~|~Rechazo~\\
 \begin{schema}{Bloque}
 fingerprint:FINGERPRINT\\
 prevblock:~FINGERPRINT\\
+indice:~\nat\\
 timestamp:~TIMESTAMP\\
 data:~DATA\\
 \end{schema}
@@ -24,6 +25,8 @@ m!:~Reporte\\
 \where
 bloque.prevblock~=~(last~cadena).fingerprint\\
 getFingerprint(bloque)~=~bloque.fingerprint\\
+bloque.indice~=~(last~cadena).indice~+~1\\
+m!~=~Okay\\
 \end{schema}
 \begin{schema}{AgregarCadenaOk}
 \Delta Nodo\\
@@ -34,4 +37,11 @@ nuevo?.prevblock~=~(last~cadena).fingerprint\\
 nuevo?.fingerprint~=~getFingerprint(nuevo?)\\
 cadena'~=~cadena~\cat~\langle nuevo?\rangle\\
 m!~=Okay\\
+\end{schema}
+\begin{schema}{ReemplazarCadena}
+\Delta Nodo\\
+nuevaCadena?:~\seq~Bloque\\
+\where
+\#nuevaCadena?~>~\#cadena\\
+cadena'~=~nuevaCadena?\\
 \end{schema}
