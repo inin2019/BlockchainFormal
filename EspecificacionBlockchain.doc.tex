@@ -1,4 +1,8 @@
 \begin{zed}
+Reporte::=~Okay~|~BloqueInvalido~|~Rechazo~\\
+\\
+\end{zed}
+\begin{zed}
 [FINGERPRINT,~TIMESTAMP,~DATA]\\
 \end{zed}
 \begin{schema}{Bloque}
@@ -13,15 +17,21 @@ getFingerprint~:~Bloque~\fun~FINGERPRINT\\
 \begin{schema}{Nodo}
 cadena:~\seq~Bloque\\
 \end{schema}
-\begin{schema}{ValidarPOW}
+\begin{schema}{ValidarBloque}
 \Xi Nodo\\
 bloque:~Bloque\\
+m!:~Reporte\\
 \where
 bloque.prevblock~=~(last~cadena).fingerprint\\
+getFingerprint(bloque)~=~bloque.fingerprint\\
 \end{schema}
 \begin{schema}{AgregarCadenaOk}
 \Delta Nodo\\
 nuevo?:~Bloque\\
+m!:~Reporte\\
 \where
-true\\
+nuevo?.prevblock~=~(last~cadena).fingerprint\\
+nuevo?.fingerprint~=~getFingerprint(nuevo?)\\
+cadena'~=~cadena~\cat~\langle nuevo?\rangle\\
+m!~=Okay\\
 \end{schema}
