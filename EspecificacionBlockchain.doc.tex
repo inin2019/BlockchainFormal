@@ -26,6 +26,7 @@ Status~::=~Activo~|~Inactivo\\
 IP:~IPADDRESS\\
 Estado:~Status\\
 cadena:~\seq~Bloque\\
+peers:~\power~IPADDRESS\\
 \end{schema}
 \begin{schema}{BloqueEntrada}
 prevblock:~FINGERPRINT~\\
@@ -69,4 +70,20 @@ nuevaCadena?:~\seq~Bloque\\
 \where
 \#nuevaCadena?~>~\#cadena\\
 cadena'~=~nuevaCadena?\\
+\end{schema}
+\begin{zed}
+listarBloques\\
+~==~(~\lambda~Nodo;\\
+~~b:~\seq~Bloque~@~cadena)\\
+\end{zed}
+\begin{axdef}
+getIP:~\power~Nodo\fun IPADDRESS\\
+\end{axdef}
+\begin{schema}{InitBlockchain}
+\Delta Nodo\\
+\where
+IP'~=~getIP(Nodo)\\
+Estado'~=~Activo\\
+cadena'~=~\langle\rangle\\
+peers'~=~\emptyset\\
 \end{schema}
