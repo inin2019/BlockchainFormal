@@ -72,10 +72,11 @@ nuevaCadena?:~\seq~Bloque\\
 cadena'~=~nuevaCadena?\\
 \end{schema}
 \begin{zed}
-listarBloques\\
-~==~(~\lambda~Nodo;\\
-~~b:~\seq~Bloque~@~cadena)\\
+listarBloques~==~(~\lambda~Nodo;~b:~\seq~Bloque~@~cadena)\\
 \end{zed}
+\begin{axdef}
+bloqueGenesis:~Bloque\\
+\end{axdef}
 \begin{axdef}
 getIP:~\power~Nodo\fun IPADDRESS\\
 \end{axdef}
@@ -84,6 +85,21 @@ getIP:~\power~Nodo\fun IPADDRESS\\
 \where
 IP'~=~getIP(Nodo)\\
 Estado'~=~Activo\\
-cadena'~=~\langle\rangle\\
+cadena'~=~\langle~bloqueGenesis~\rangle\\
 peers'~=~\emptyset\\
+\end{schema}
+\begin{schema}{TSalida}
+ID:~FINGERPRINT\\
+Timestamp:~TIMESTAMP\\
+Direccion:~FINGERPRINT\\
+Cantidad:~\nat_1\\
+\end{schema}
+\begin{schema}{TEntrada}
+IDOut:~FINGERPRINT\\
+Firma:~FINGERPRINT\\
+\end{schema}
+\begin{schema}{Transaccion}
+ID:~FINGERPRINT\\
+Salidas:~\power~TSalida\\
+Entradas:~\power TEntrada\\
 \end{schema}
