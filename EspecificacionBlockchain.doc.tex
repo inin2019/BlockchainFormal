@@ -3,6 +3,9 @@ Reporte::=~Okay~|~BloqueInvalido~|~Rechazo~\\
 \\
 \end{zed}
 \begin{zed}
+Success\defs[r!~:~Reporte~|~r!~=~Okay]\\
+\end{zed}
+\begin{zed}
 [FINGERPRINT,~TIMESTAMP,~DATA]\\
 \end{zed}
 \begin{schema}{Bloque}
@@ -110,3 +113,40 @@ getPublicFromWallet:~FINGERPRINT\\
 \begin{axdef}
 getWalletBalance:~FINGERPRINT~\fun~\integer\\
 \end{axdef}
+\begin{schema}{MontoDisponible}
+\Xi Transaccion\\
+Wallet?:~FINGERPRINT\\
+Monto?:~\integer\\
+\where
+Monto?~>~0\\
+Monto?~\leq~getWalletBalance(Wallet?)\\
+\end{schema}
+\begin{axdef}
+getTSalidas~:~\{user:~FINGERPRINT;monto:~\integer\}\fun\power TSalida\\
+\end{axdef}
+\begin{schema}{EnviarTransaccionOk}
+\Delta Transaccion\\
+Wallet?:~FINGERPRINT\\
+Receiver:~FINGERPRINT\\
+Monto?:~\integer\\
+R!:~Reporte\\
+\where
+MontoDisponible\\
+Monto?~>~0\\
+Receiver~\neq~Wallet?\\
+R!~=~Okay\\
+\forall~t:~TSalida~|~t~\in~getTSalidas~(Wallet?,Monto?)~@~t.~Direccion~=~Receiver\\
+\end{schema}
+\begin{schema}{FondoInsuficiente}
+\Xi Transaccion\\
+Wallet?:~FINGERPRINT\\
+Monto?:~\integer\\
+R!~:~Reporte\\
+\where
+Monto?~>~0\\
+Monto?~>~getWalletBalance(Wallet?)\\
+R!~=~Rechazo\\
+\end{schema}
+\begin{zed}
+RealizarTransferencia~\defs~(EnviarTransaccionOk~\land~Success)~\lor~FondoInsuficiente\\
+\end{zed}
